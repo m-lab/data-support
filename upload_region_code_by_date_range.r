@@ -85,4 +85,4 @@ pull_mm_ndt<-function(start_date, end_date, query, state, state.abv){
   
 }
 
-D<-pull_mm_ndt("2015-12-01", "2015-12-31", sql_fir, "'Pennsylvania'","PA")
+D<-pull_mm_ndt("2017-01-01", "2017-12-31", sql_fir, "'Ohio'","OH")
