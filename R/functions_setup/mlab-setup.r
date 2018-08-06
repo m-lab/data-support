@@ -1,42 +1,35 @@
+############################
+# Load R packages
+############################
 library(bigrquery)
 library(lubridate)
 library(tidyverse)
-project <- "mlab-sandbox"
-sql_fir <- "#standardSQL
-SELECT
-ndt.log_time AS log_time,
-ndt.connection_spec.client_ip AS client_ip,
-ndt.connection_spec.client_geolocation.latitude AS client_lat,
-ndt.connection_spec.client_geolocation.longitude AS client_lon,
-8 * (web100_log_entry.snap.HCThruOctetsReceived /
-         web100_log_entry.snap.Duration) AS upload_speed_Mbps,
-ndt.web100_log_entry.snap.MinRTT AS minRTT,
-ndt.connection_spec.server_geolocation.city AS city,
-ndt.connection_spec.client_geolocation.continent_code AS continent,
-ndt.connection_spec.client_geolocation.country_code AS country_code,
-ndt.connection_spec.client_geolocation.country_name AS country_name,
-ndt.connection_spec.client_geolocation.region AS client_region,
-mm.asn_number AS asn_number,
-mm.asn_name AS asn_name,
-ndt.connection_spec.server_hostname AS server_hostname,
-ndt.connection_spec.server_ip AS server_ip
-FROM
-`measurement-lab.release.ndt_downloads` AS ndt,
-`mlab-sandbox.maxmind_historical.DATEMM` AS mm
-WHERE
-ndt.partition_date BETWEEN DATE1 AND DATE2
-AND
-(
-  ndt.connection_spec.client_geolocation.region = STATE
-  OR ndt.connection_spec.client_geolocation.region = STATEABV
-)
-AND 
-TO_BASE64(NET.IP_FROM_STRING(ndt.connection_spec.client_ip)) 
-BETWEEN 
-TO_BASE64(NET.IP_FROM_STRING(mm.min_ip)) AND
-TO_BASE64(NET.IP_FROM_STRING(mm.max_ip));"
+library(zipcode)
+library(tidyverse)
+library(ggplot2)
+library(ggrepel)
+library(rgdal)
+library(rgeos)
+library(maptools)
+library(viridis)
+library(lubridate)
+library(RColorBrewer)
+library(reshape2)
+library(tidycensus)
+library(sp)
+library(sf)
+library(tigris)
+library(httr)
 
+############################
+# Set the Google Cloud Project to query M-Lab data 
+############################
+project <- "measurement-lab"
 
+############################
+# Function to pull M-Lab Data by region code, by day, for a given date range
+# -- note - replace with Nick's function
+############################
 pull_mm_ndt<-function(start_date, end_date, query, state, state.abv){
   D.return<-data.frame()
   day.starts<-seq(ymd(start_date), ymd(end_date), by="day")
@@ -68,12 +61,12 @@ pull_mm_ndt<-function(start_date, end_date, query, state, state.abv){
     date.fir<-str_sub(query, 1,date.loc[1]-1)
     date.last<-str_sub(query, date.loc[2]+1, nchar(query))
     query<-str_c(date.fir, date_2, date.last)
-    
+
     date.mm.loc<-str_locate(query, "DATEMM")
     date.mm.fir<-str_sub(query, 1,date.mm.loc[1]-1)
     date.mm.last<-str_sub(query, date.mm.loc[2]+1, nchar(query))
     query<-str_c(date.mm.fir, date_mm[i], date.mm.last)
-
+         
     todo_copies <- query_exec(query, project = project, use_legacy_sql=FALSE, max_pages = Inf)
     D.curr<-data.frame(todo_copies,"date"=rep(date_1, nrow(todo_copies)))
     D.return<-bind_rows(D.return,D.curr)
@@ -84,5 +77,3 @@ pull_mm_ndt<-function(start_date, end_date, query, state, state.abv){
   return(D.return)
   
 }
-
-D<-pull_mm_ndt("2017-01-01", "2017-12-31", sql_fir, "'Ohio'","OH")
