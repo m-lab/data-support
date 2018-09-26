@@ -13,7 +13,7 @@ ndt.connection_spec.client_geolocation.longitude AS client_lon,
 ndt.web100_log_entry.snap.SndLimTimeCwnd +
 ndt.web100_log_entry.snap.SndLimTimeSnd)) AS download_speed_Mbps,
 ndt.web100_log_entry.snap.MinRTT AS minRTT,
-ndt.connection_spec.server_geolocation.city AS city,
+ndt.connection_spec.client_geolocation.city AS city,
 ndt.connection_spec.client_geolocation.continent_code AS continent,
 ndt.connection_spec.client_geolocation.country_code AS country_code,
 ndt.connection_spec.client_geolocation.country_name AS country_name,
@@ -95,4 +95,4 @@ pull_mm_ndt<-function(start_date, end_date, query, state, state.abv){
   
 }
 
-D<-pull_mm_ndt("2015-12-01", "2015-12-31", sql_fir, "'Pennsylvania'","PA")
+D<-pull_mm_ndt("2018-01-01", "2018-06-30", sql_fir, "'Minnesota'","MN")
