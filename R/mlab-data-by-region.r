@@ -18,7 +18,7 @@
 ###
 # Set the working directory for R
 # - change this to the folder location where you have cloned/saved this code repository
-setwd("~/Desktop/mlab10year/data-support/R")
+setwd("~/data-support/R")
 
 source("functions_setup/mlab-setup.r")
 
