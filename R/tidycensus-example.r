@@ -104,14 +104,13 @@ MN_2018_median_down_cd115_plot <- MN_2018_DL_median_ip_day_district %>%
 MN_2018_median_up_cd115_plot <- MN_2018_UL_median_ip_day_district %>%
   ggplot(aes(fill=median_upload_Mbps),color=median_upload_Mbps) + geom_sf()
 
-###############
-> districts <- readOGR(dsn="examples/geofiles/us_legislative_districts", layer="cb_2017_us_cd115_500k",stringsAsFactors = FALSE)
-> MN_districts <- districts[districts$STATEFP=="27",]
-> idList <- MN_districts@data$CD115FP
-> centroids.districts <- as.data.frame(coordinates(MN_districts))
-> centroids.MNdist <- as.data.frame(coordinates(MN_districts), MN_districts@data$CD115FP)
+districts <- readOGR(dsn="examples/geofiles/us_legislative_districts", layer="cb_2017_us_cd115_500k",stringsAsFactors = FALSE)
+MN_districts <- districts[districts$STATEFP=="27",]
+idList <- MN_districts@data$CD115FP
+centroids.districts <- as.data.frame(coordinates(MN_districts))
+centroids.MNdist <- as.data.frame(coordinates(MN_districts), MN_districts@data$CD115FP)
 
-> test.df <- data.frame(id=idList, centroids.districts)
+test.df <- data.frame(id=idList, centroids.districts)
 
 geom_col(mapping = NULL, data = NULL, position = "stack", ...,
          width = NULL, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
