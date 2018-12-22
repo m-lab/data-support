@@ -24,7 +24,6 @@ ndt.connection_spec.client_geolocation.region AS client_region,
 ndt.test_id AS test_id,
 ndt.partition_date AS partition_date,
 ndt.project AS project,
-ndt.log_time AS log_time,
 ndt.task_filename AS task_filename,
 ndt.parse_time AS parse_time,
 ndt.blacklist_flags AS blacklist_flags,
@@ -188,7 +187,6 @@ AND
   ndt.connection_spec.client_geolocation.region = REGION
   OR ndt.connection_spec.client_geolocation.region = REGIONCODE
 )
-AND ndt.partition_date BETWEEN DATE1 AND DATE2
 AND 
 TO_BASE64(NET.IP_FROM_STRING(ndt.connection_spec.client_ip)) 
 BETWEEN 
