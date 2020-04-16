@@ -12,4 +12,4 @@ Please fork this repository and use the examples for your own learning. The M-La
 
 The examples and code included in this repository are organized according to the tool used. For example, to learn about using [R](https://www.r-project.org/) / [R Studio](https://www.rstudio.com/) to query, analyze, and visualize M-Lab data, look in the [**R**](https://github.com/m-lab/data-support/tree/master/R) folder. 
 
-General resources for getting started with M-Lab data can be found in our [Data Documentation](https://www.measurementlab.net/data/docs/) on the M-Lab website.
+General examples are currently being organized in the folder, [examples](examples/).
